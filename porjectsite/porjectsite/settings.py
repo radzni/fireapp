@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'FIREAPP',  # Custom app for the project
+    'widget_tweaks',  # Custom app for the project
 ]
 
 MIDDLEWARE = [
