@@ -9,6 +9,7 @@ from django.db.models.functions import ExtractMonth
 from django.db.models import Count  
 from datetime import datetime 
 import json
+from .models import Incident, FireStation, Locations
 
 class HomePageView(ListView):
     model = Locations
@@ -183,3 +184,46 @@ def map_station(request):
     }  
 
     return render(request, 'map_station.html', context)  
+
+def map_incidents(request):
+    # Retrieve incidents with location data
+    incidents = Incident.objects.select_related('location').values(
+        'id',
+        'date_time',
+        'severity_level',
+        'description',
+        'location__latitude',
+        'location__longitude'
+    )
+
+    # Convert queryset to a list and prepare data for the template
+    incidents_list = []
+    for incident in incidents:
+        try:
+            # Convert Decimal to float for latitude and longitude
+            latitude = float(incident['location__latitude'])
+            longitude = float(incident['location__longitude'])
+
+            # Prepare the incident data
+            incident_data = {
+                'id': incident['id'],
+                'date_time': incident['date_time'].strftime('%Y-%m-%d %H:%M:%S') if incident['date_time'] else None,
+                'severity_level': incident['severity_level'],
+                'description': incident['description'],
+                'latitude': latitude,
+                'longitude': longitude
+            }
+
+            # Add the prepared data to the list
+            incidents_list.append(incident_data)
+
+        except (TypeError, ValueError, KeyError) as e:
+            # Handle any errors in data conversion
+            print(f"Error processing incident {incident['id']}: {str(e)}")
+            continue
+
+    context = {
+        'incidents': incidents_list,
+    }
+
+    return render(request, 'map_fire_incidents.html', context)

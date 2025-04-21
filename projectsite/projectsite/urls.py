@@ -15,5 +15,6 @@ urlpatterns = [
     path('multiline_chart/', MultilineIncidentTop3Country, name='chart'),
     path('multiple_bar_chart/', multipleBarbySeverity, name='chart'),
     path('stations', views.map_station, name='map-station'),
+    path('Incidents', views.map_incidents, name='map-incident'),
 
 ]

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}  
+{% load static %}  
+{% block content %}  
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Dashboard</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Maps</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Fire Inci</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Fire Incidents</h4>
+                    <p class="card-category text-center">Looks great on any resolution. Made by our friends from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>.</p>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-11 ml-auto mr-auto">
+                        <div id="map" style="width: 100%; height: 400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>  
+    var map = L.map('map').setView([9.786272994389028, 118.7437844834497], 13);  
+    var redIcon = L.icon({  
+        iconUrl: '{% static "img/flame.png" %}',  // Use Django's static template tag
+        iconSize: [50, 50], // Adjust the size as needed  
+    });  
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {  
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'  
+    }).addTo(map);  
+
+    // Create an array to hold markers  
+    var markers = [];  
+    
+    // Incident marker data from the Django context  
+    var fireData = {{ incidents|safe }};  // Data passed from the view
+
+    fireData.forEach(function(data) {  
+        // Use latitude and longitude from your data object  
+        var latitude = parseFloat(data.latitude);  
+        var longitude = parseFloat(data.longitude);  
+
+        // Create the marker for the incident  
+        var marker = L.marker([latitude, longitude], { icon: redIcon }).addTo(map);  
+
+        // Prepare the content for the popup  
+        var popupContent = 'Severity: ' + data.severity_level +   
+                           '<br>Description: ' + data.description;  
+
+        // Check if data.date_time exists  
+        if (data.date_time) {  
+            // Safely create a Date object  
+            var dateObj;
+            var dateStr = data.date_time;
+
+            // Try to parse the date string
+            try {
+                // Split the date string into parts
+                var dateParts = dateStr.split(' ');
+                var date = dateParts[0].split('-');
+                var time = dateParts[1].split(':');
+                
+                // Create Date object using individual parts
+                dateObj = new Date(
+                    parseInt(date[0]),  // Year
+                    parseInt(date[1]) - 1,  // Month (0-based in JavaScript)
+                    parseInt(date[2]),  // Day
+                    parseInt(time[0]),  // Hours
+                    parseInt(time[1]),  // Minutes
+                    parseInt(time[2])   // Seconds
+                );
+            } catch (error) {
+                console.error('Error parsing date:', error);
+                dateObj = null;
+            }
+
+            // Check if the date is valid  
+            if (dateObj && !isNaN(dateObj.getTime())) {  
+                popupContent += '<br>Date and Time: ' + dateObj.toLocaleString();  
+            } else {  
+                popupContent += '<br>Date and Time: Invalid date';  
+            }  
+        } else {  
+            popupContent += '<br>Date and Time: N/A';  
+        }  
+
+        // Create and bind the popup  
+        var popup = L.popup().setContent(popupContent);  
+        marker.bindPopup(popup);  
+
+        // Add event listeners for the marker  
+        marker.on('mouseover', function () {  
+            this.openPopup();  
+        });  
+
+        marker.on('mouseout', function () {  
+            this.closePopup();  
+        });  
+
+        // Add the marker to the markers array  
+        markers.push(marker);  
+    });  
+
+    // Add error handling for marker creation
+    window.onload = function() {
+        if (markers.length === 0) {
+            console.log('No markers were created. Check the data format and console for errors.');
+        }
+    };
+</script>
+{% endblock %}
