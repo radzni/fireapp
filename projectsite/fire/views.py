@@ -17,6 +17,7 @@ from django.utils.dateparse import parse_datetime
 from django.db.models import Q
 from django.views.generic.list import ListView
 from django.db.models.query import QuerySet
+from fire.forms import FireStationForm, IncidentForm, LocationForm, FireTruckForm, FirefightersForm, WeatherConditionForm
 
 class HomePageView(ListView):
     model = Locations
@@ -270,10 +271,12 @@ class FireStationDeleteView(DeleteView):
     template_name = 'delfirestations.html'
     success_url = reverse_lazy('firestation-delete')
 
+##########################################################################################################
+
 class FireFighterList(ListView):
     model = Firefighters
     context_object_name = 'firefighters'
-    template_name = "listfight.html"
+    template_name = "listfighter.html"
     paginate_by = 5
 
     def get_queryset(self, *args, **kwargs):
@@ -287,24 +290,26 @@ class FireFighterList(ListView):
 class FireFighterCreateView(CreateView):
     model = Firefighters
     form_class = FirefightersForm
-    template_name = "addfight.html"
+    template_name = "addfighter.html"
     success_url = reverse_lazy('firefighter-add')
 
 class FireFighterUpdateView(UpdateView):
     model = Firefighters
     form_class = FirefightersForm
-    template_name = "editfight.html"
+    template_name = "editfighter.html"
     success_url = reverse_lazy('firefighter-update')
 
 class FireFighterDeleteView(DeleteView):
     model = Firefighters
-    template_name = 'delfight.html'
+    template_name = 'delfighter.html'
     success_url = reverse_lazy('firefighter-delete')
+
+##########################################################################################################
 
 class IncidentList(ListView):
     model = Incident
     context_object_name = 'incident'
-    template_name = "listincident.html"
+    template_name = "listincidents.html"
     paginate_by = 5
 
     def get_queryset(self, *args, **kwargs):
@@ -318,24 +323,26 @@ class IncidentList(ListView):
 class IncidentCreateView(CreateView):
     model = Incident
     form_class = IncidentForm
-    template_name = "addincident.html"
+    template_name = "addincidents.html"
     success_url = reverse_lazy('incident-add')
 
 class IncidentUpdateView(UpdateView):
     model = Incident
     form_class = IncidentForm
-    template_name = "editincident.html"
+    template_name = "editincidents.html"
     success_url = reverse_lazy('incident-update')
 
 class IncidentDeleteView(DeleteView):
     model = Incident
-    template_name = 'delincident.html'
+    template_name = 'delincidents.html'
     success_url = reverse_lazy('incident-delete')
+
+##########################################################################################################
 
 class LocationList(ListView):
     model = Locations
     context_object_name = 'locations'
-    template_name = "listloc.html"
+    template_name = "listlocation.html"
     paginate_by = 5
 
     def get_queryset(self, *args, **kwargs):
@@ -349,20 +356,22 @@ class LocationList(ListView):
 class LocationCreateView(CreateView):
     model = Locations
     form_class = LocationForm
-    template_name = "addloc.html"
+    template_name = "addlocation.html"
     success_url = reverse_lazy('location-add')
 
 class LocationUpdateView(UpdateView):
     model = Locations
     form_class = LocationForm
-    template_name = "editloc.html"
+    template_name = "editlocation.html"
     success_url = reverse_lazy('ocation-update')
 
 class LocationDeleteView(DeleteView):
     model = Locations
-    template_name = 'delloc.html'
+    template_name = 'dellocation.html'
     success_url = reverse_lazy('location-delete')
 
+
+##########################################################################################################
 
 class FireTruckList(ListView):
     model = FireTruck
@@ -395,10 +404,12 @@ class FireTruckDeleteView(DeleteView):
     template_name = 'deltruck.html'
     success_url = reverse_lazy('weathercondition-delete')
 
+##########################################################################################################
+
 class WeatherConditionList(ListView):
     model = WeatherConditions
     context_object_name = 'weathercondition'
-    template_name = "listwea.html"
+    template_name = "listweather.html"
     paginate_by = 5
 
     def get_queryset(self, *args, **kwargs):
@@ -412,16 +423,16 @@ class WeatherConditionList(ListView):
 class WeatherConditionCreateView(CreateView):
     model = WeatherConditions
     form_class = WeatherConditionForm
-    template_name = "addwea.html"
+    template_name = "addweather.html"
     success_url = reverse_lazy('firetruck-add')
 
 class WeatherConditionUpdateView(UpdateView):
     model = WeatherConditions
     form_class = WeatherConditionForm
-    template_name = "editwea.html"
+    template_name = "editweather.html"
     success_url = reverse_lazy('firetruck-update')
 
 class WeatherConditionDeleteView(DeleteView):
     model = WeatherConditions
-    template_name = 'delwea.html'
+    template_name = 'delweather.html'
     success_url = reverse_lazy('firetruck-delete')
