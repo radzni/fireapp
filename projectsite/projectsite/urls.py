@@ -4,6 +4,7 @@ from django.urls import path
 from fire.views import HomePageView
 from fire import views
 from fire.views import HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity
+from fire.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -18,7 +19,6 @@ urlpatterns = [
     path('stations', views.map_station, name='map-station'),
     path('Incidents', views.map_incidents, name='map-incident'),
 
-    path('incidents', views.map_incident, name='map-incident'),
     path('firestationlist', FireStationList.as_view(), name='firestation-list'),
     path('firestation/add', FireStationCreateView.as_view(), name='firestation-add'),
     path('firestationlist/<pk>', FireStationUpdateView.as_view(), name='firestation-update'),
@@ -43,7 +43,7 @@ urlpatterns = [
     path('weatherconditionlist/add', WeatherConditionCreateView.as_view(), name='weathercondition-add'),
     path('weatherconditionlist/<pk>', WeatherConditionUpdateView.as_view(), name='weathercondition-update'),
     path('weatherconditionlist/<pk>/delete', WeatherConditionDeleteView.as_view(), name='weathercondition-delete'),
-    
+
     path('firetrucklist', FireTruckList.as_view(), name='firetruck-list'),
     path('firetrucklist/add', FireTruckCreateView.as_view(), name='firetruck-add'),
     path('firetrucklist/<pk>', FireTruckUpdateView.as_view(), name='firetruck-update'),
