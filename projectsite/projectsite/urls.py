@@ -5,6 +5,40 @@ from fire.views import HomePageView
 from fire import views
 from fire.views import HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth, MultilineIncidentTop3Country, multipleBarbySeverity
 from fire.views import *
+from fire.views import (
+    HomePageView,
+    ChartView,
+    PieCountbySeverity,
+    LineCountbyMonth,
+    MultilineIncidentTop3Country,
+    multipleBarbySeverity,
+    map_station,
+    map_incidents,
+    FireStationList,
+    FireStationCreateView,
+    FireStationUpdateView,
+    FireStationDeleteView,
+    FireFighterList,
+    FireFighterCreateView,
+    FireFighterUpdateView,
+    FireFighterDeleteView,
+    IncidentList,
+    IncidentCreateView,
+    IncidentUpdateView,
+    IncidentDeleteView,
+    LocationList,
+    LocationCreateView,
+    LocationUpdateView,
+    LocationDeleteView,
+    WeatherConditionList,
+    WeatherConditionCreateView,
+    WeatherConditionUpdateView,
+    WeatherConditionDeleteView,
+    FireTruckList,
+    FireTruckCreateView,
+    FireTruckUpdateView,
+    FireTruckDeleteView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
