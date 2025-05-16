@@ -38,6 +38,7 @@ from fire.views import (
     FireTruckCreateView,
     FireTruckUpdateView,
     FireTruckDeleteView,
+    
 )
 
 urlpatterns = [
