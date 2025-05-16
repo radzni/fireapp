@@ -288,7 +288,7 @@ class FireStationDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         # Get the object to delete
         obj = self.get_object()
-        fire_station_name = obj.name  # Use the relevant field
+        fire_station_name = obj.name 
         response = super().delete(request, *args, **kwargs)
         messages.success(request, f"Fire Station '{fire_station_name}' has been successfully deleted.")
         return response
@@ -317,7 +317,7 @@ class FireFighterCreateView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        fire_fighter_name = form.instance.name
+        fire_fighter_name = form.instance.name, form.instance.rank
         messages.success(self.request, f"Fire Fighter '{fire_fighter_name}' has been successfully created.")
         return response
 
@@ -329,7 +329,7 @@ class FireFighterUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        fire_fighter_name = form.instance.name
+        fire_fighter_name = form.instance.name, form.instance.rank
         messages.success(self.request, f"Fire Fighter '{fire_fighter_name}' has been successfully updated.")
         return response
 
@@ -341,7 +341,7 @@ class FireFighterDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         # Get the object to delete
         obj = self.get_object()
-        fire_fighter_name = obj.name  # Use the relevant field
+        fire_fighter_name = obj.name, obj.rank
         response = super().delete(request, *args, **kwargs)
         messages.success(request, f"Fire Station '{fire_fighter_name}' has been successfully deleted.")
         return response
@@ -370,7 +370,7 @@ class IncidentCreateView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        fire_incidents_name = form.instance.name
+        fire_incidents_name = form.instance.location.name, form.instance.severity_level, form.instance.description
         messages.success(self.request, f"Fire Incident '{fire_incidents_name}' has been successfully created.")
         return response
 
@@ -382,7 +382,8 @@ class IncidentUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Fire Incident '{form.instance.title}' has been successfully updated.")
+        fire_incidents_name = form.instance.location.name, form.instance.severity_level, form.instance.description
+        messages.success(self.request, f"Fire Incident '{fire_incidents_name}' has been successfully updated.")
         return response
 
 class IncidentDeleteView(DeleteView):
@@ -392,8 +393,9 @@ class IncidentDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
+        fire_incidents_name = obj.location.name, obj.severity_level, obj.description
         response = super().delete(request, *args, **kwargs)
-        messages.success(request, f"Fire Incident '{obj.title}' has been successfully deleted.")
+        messages.success(request, f"Fire Incident '{fire_incidents_name}' has been successfully deleted.")
         return response
 
 ##########################################################################################################
@@ -469,7 +471,8 @@ class FireTruckCreateView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Fire Truck '{form.instance.identifier}' has been successfully created.")
+        truck = form.instance.truck_number, form.instance.model
+        messages.success(self.request, f"Fire Truck '{truck}' on '{form.instance.station}' has been successfully created.")
         return response
 
 class FireTruckUpdateView(UpdateView):
@@ -480,7 +483,8 @@ class FireTruckUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Fire Truck '{form.instance.identifier}' has been successfully updated.")
+        truck = form.instance.truck_number, form.instance.model
+        messages.success(self.request, f"Fire Truck '{truck}' on '{form.instance.station}' has been successfully updated.")
         return response
 
 class FireTruckDeleteView(DeleteView):
@@ -490,8 +494,9 @@ class FireTruckDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
+        truck = obj.truck_number, obj.model
         response = super().delete(request, *args, **kwargs)
-        messages.success(request, f"Fire Truck '{obj.identifier}' has been successfully deleted.")
+        messages.success(request, f"Fire Truck '{truck}' on '{obj.station}' has been successfully deleted.")
         return response
 ##########################################################################################################
 
@@ -517,7 +522,7 @@ class WeatherConditionCreateView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Weather Condition '{form.instance.condition}' has been successfully created.")
+        messages.success(self.request, f"Weather Condition for '{form.instance.incident.severity_level}' on '{form.instance.incident.location}' has been successfully created.")
         return response
 
 class WeatherConditionUpdateView(UpdateView):
@@ -528,7 +533,7 @@ class WeatherConditionUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f"Weather Condition '{form.instance.condition}' has been successfully updated.")
+        messages.success(self.request, f"Weather Condition '{form.instance.incident.severity_level}' on '{form.instance.incident.location}' has been successfully updated.")
         return response
 
 class WeatherConditionDeleteView(DeleteView):
@@ -539,5 +544,5 @@ class WeatherConditionDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
         response = super().delete(request, *args, **kwargs)
-        messages.success(request, f"Weather Condition '{obj.condition}' has been successfully deleted.")
+        messages.success(request, f"Weather Condition '{obj.incident}' on '{obj.incident.location}' has been successfully deleted.")
         return response
